@@ -175,12 +175,12 @@ func (p *Pipeline) process(item workItem) {
 // exit, and finally cancels the pipeline context. It is idempotent.
 func (p *Pipeline) Shutdown() error {
 	p.shutdownOnce.Do(func() {
-		p.cancel()
 		p.mu.Lock()
 		p.closed = true
 		close(p.queue)
 		p.mu.Unlock()
 		p.wg.Wait()
+		p.cancel()
 	})
 	return nil
 }
